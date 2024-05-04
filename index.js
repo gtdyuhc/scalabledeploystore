@@ -1,12 +1,28 @@
-function isAnagram(s, t) {
-  if (s.length !== t.length) return false;
-  const map = new Map();
-  for (const char of s) {
-    map.set(char, (map.get(char) || 0) + 1);
+function reorderList(head) {
+  if (!head || !head.next) return;
+  let slow = head;
+  let fast = head;
+  while (fast.next && fast.next.next) {
+    slow = slow.next;
+    fast = fast.next.next;
   }
-  for (const char of t) {
-    if (!map.has(char) || map.get(char) === 0) return false;
-    map.set(char, map.get(char) - 1);
+  let prev = null;
+  let curr = slow.next;
+  slow.next = null;
+  while (curr) {
+    const next = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = next;
   }
-  return true;
+  let first = head;
+  let second = prev;
+  while (second.next) {
+    const next = first.next;
+    first.next = second;
+    first = next;
+    const next2 = second.next;
+    second.next = first;
+    second = next2;
+  }
 }
