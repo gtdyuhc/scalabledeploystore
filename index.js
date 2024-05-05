@@ -1,28 +1,20 @@
-function reorderList(head) {
-  if (!head || !head.next) return;
-  let slow = head;
-  let fast = head;
-  while (fast.next && fast.next.next) {
-    slow = slow.next;
-    fast = fast.next.next;
+function isAlienSorted(words, order) {
+  const dict = new Map();
+  for (let i = 0; i < order.length; i++) {
+    dict.set(order[i], i);
   }
-  let prev = null;
-  let curr = slow.next;
-  slow.next = null;
-  while (curr) {
-    const next = curr.next;
-    curr.next = prev;
-    prev = curr;
-    curr = next;
+  for (let i = 0; i < words.length - 1; i++) {
+    const word1 = words[i];
+    const word2 = words[i + 1];
+    let found = false;
+    for (let j = 0; j < Math.min(word1.length, word2.length); j++) {
+      if (word1[j] !== word2[j]) {
+        if (dict.get(word1[j]) > dict.get(word2[j])) return false;
+        found = true;
+        break;
+      }
+    }
+    if (!found && word1.length > word2.length) return false;
   }
-  let first = head;
-  let second = prev;
-  while (second.next) {
-    const next = first.next;
-    first.next = second;
-    first = next;
-    const next2 = second.next;
-    second.next = first;
-    second = next2;
-  }
+  return true;
 }
